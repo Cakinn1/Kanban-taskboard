@@ -1,13 +1,35 @@
-import React from 'react'
-import { KanbanTaskProps } from '../../App'
+import React, { useState } from "react";
+import { KanbanTaskProps } from "../../App";
+import ColumnModel from "../model/ColumnModel";
 
 export default function ColumnTask(props: KanbanTaskProps) {
-  const {description, id, status, statusId, subtasks,title} = props
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { description, id, status, statusId, subtasks, title } = props;
+
+  const subTaskComepletedTrue = subtasks.filter((item) => {
+    return item.isCompleted;
+  });
+
+  const subTaskLength = subtasks.map((item) => {
+    return item.isCompleted;
+  });
+
+  function handleModalOpen() {
+    setIsModalOpen(!isModalOpen);
+  }
+
   return (
-    <section className='w-[320px]'>
-      <div className='bg-[#2B2C37]'>
-        d
+    <section className="w-[320px]">
+      <div
+        onClick={() => handleModalOpen()}
+        className="bg-[#2B2C37] space-y-1 cursor-pointer hover:opacity-50 duration-300  rounded-lg px-4 py-6"
+      >
+        <h1 className="text-white">{title}</h1>
+        <p className="text-[#828fa3] text-[11px]">
+          {subTaskComepletedTrue.length} of {subTaskLength.length} subtasks
+        </p>
       </div>
+      {isModalOpen && <ColumnModel subtasks={subtasks} />}
     </section>
-  )
+  );
 }
