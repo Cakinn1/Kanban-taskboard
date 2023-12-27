@@ -32,13 +32,12 @@ export default function App() {
   const [kanbanData, setKanbanData] = useState<KabanDataColumnProps[]>(
     data.boards[0].columns
   );
-  //  we are filtering it by the name "platform launch",
-  //  change later to make dynamic
+
 
   return (
     <div className="h-screen">
       <Nav />
-      <Main kanbanData={kanbanData} />
+      <Main setKanbanData={setKanbanData} kanbanData={kanbanData} />
     </div>
   );
 }

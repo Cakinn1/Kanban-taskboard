@@ -1,10 +1,24 @@
 import React, { useState } from "react";
-import { KanbanTaskProps } from "../../App";
+import { KabanDataColumnProps, KanbanTaskProps } from "../../App";
 import ColumnModel from "../model/ColumnModel";
 
-export default function ColumnTask(props: KanbanTaskProps) {
+interface ColumnTaskProps extends KanbanTaskProps {
+  setKanbanData: (value: KabanDataColumnProps[]) => void;
+  kanbanData: KabanDataColumnProps[];
+}
+
+export default function ColumnTask(props: ColumnTaskProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { description, id, status, statusId, subtasks, title } = props;
+  const {
+    description,
+    id,
+    status,
+    statusId,
+    subtasks,
+    title,
+    setKanbanData,
+    kanbanData,
+  } = props;
 
   const subTaskComepletedTrue = subtasks.filter((item) => {
     return item.isCompleted;
@@ -29,7 +43,22 @@ export default function ColumnTask(props: KanbanTaskProps) {
           {subTaskComepletedTrue.length} of {subTaskLength.length} subtasks
         </p>
       </div>
-      {isModalOpen && <ColumnModel subtasks={subtasks} />}
+      {isModalOpen && (
+        <ColumnModel
+          kanbanData={kanbanData}
+          setKanbanData={setKanbanData}
+          subTaskComepletedTrue={subTaskComepletedTrue.length}
+          subTaskLength={subTaskLength.length}
+          setIsModalOpen={setIsModalOpen}
+          description={description}
+          id={id}
+          status={status}
+          statusId={statusId}
+          subtasks={subtasks}
+          title={title}
+          key={id}
+        />
+      )}
     </section>
   );
 }

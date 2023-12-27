@@ -4,10 +4,11 @@ import RightBoard from "./RightBoard";
 
 interface MainProps {
   kanbanData: KabanDataColumnProps[];
+  setKanbanData: (value: KabanDataColumnProps[]) => void;
 }
 
 export default function Main(props: MainProps) {
-  const { kanbanData } = props;
+  const { kanbanData, setKanbanData } = props;
   return (
     <section className="flex" style={{ height: "calc(100vh - 100px)" }}>
       <RightBoard />
@@ -16,6 +17,8 @@ export default function Main(props: MainProps) {
           {kanbanData.map((data) => {
             return (
               <Column
+              kanbanData={kanbanData}
+                setKanbanData={setKanbanData}
                 id={data.id}
                 name={data.name}
                 tasks={data.tasks}
