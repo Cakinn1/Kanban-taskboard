@@ -1,6 +1,8 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { KabanDataColumnProps, KanbanTaskProps } from "../../App";
 import ColumnHeader from "./ColumnHeader";
+import { useState } from "react";
+import DeleteTaskModel from "./DeleteTaskModel";
 
 interface ColumnModelProps extends KanbanTaskProps {
   setIsModalOpen: (value: boolean) => void;
@@ -24,6 +26,8 @@ export default function ColumnModel(props: ColumnModelProps) {
     setKanbanData,
     kanbanData,
   } = props;
+  const [isOtherModalsOpen, setIsOtherModalsOpen] = useState<boolean>(false);
+  const [deleteTaskModel, setDeleteTaskModel] = useState<boolean>(false);
 
   function handleContentClick(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
@@ -48,16 +52,38 @@ export default function ColumnModel(props: ColumnModelProps) {
     setKanbanData(updateTask);
   }
 
+  function handleDeleteTask() {
+    const updateTask = kanbanData.map((item) => {
+      return {
+        ...item,
+        tasks: item.tasks.filter((task) => {
+          return task.id !== id;
+        }),
+      };
+    });
+
+    setKanbanData(updateTask);
+  }
+
   return (
     <section
       onClick={() => setIsModalOpen(false)}
-      className="absolute z-50 cursor-pointer bg-black bg-opacity-35 w-full h-full top-0 left-0"
+      className="absolute z-50 cursor-pointer  bg-black bg-opacity-40 w-full h-full top-0 left-0"
     >
       <div
         onClick={(e) => handleContentClick(e)}
-        className="absolute left-1/2  space-y-4  p-8 w-[480px] rounded-2xl h-[370px] -translate-x-1/2 -translate-y-1/2 top-1/2 bg-[#2B2C37]"
+        className={`${
+          isOtherModalsOpen ? "hidden" : ""
+        } absolute left-1/2  space-y-4  p-8 w-[480px] rounded-2xl h-[370px] -translate-x-1/2 -translate-y-1/2 top-1/2 bg-[#2B2C37]`}
       >
-        <ColumnHeader description={description} title={title} key={title} />
+        <ColumnHeader
+          setDeleteTaskModel={setDeleteTaskModel}
+          deleteTaskModel={deleteTaskModel}
+          setIsOtherModalsOpen={setIsOtherModalsOpen}
+          description={description}
+          title={title}
+          key={title}
+        />
         <div className="space-y-2">
           <h1 className="text-white text-[13px]">
             Subtasks ({subTaskComepletedTrue} of {subTaskLength})
@@ -76,6 +102,14 @@ export default function ColumnModel(props: ColumnModelProps) {
           </div>
         </div>
       </div>
+      {deleteTaskModel && (
+        <DeleteTaskModel
+          title={title}
+          setDeleteTaskModel={setDeleteTaskModel}
+          deleteTaskModel={deleteTaskModel}
+          handleDeleteTask={handleDeleteTask}
+        />
+      )}
     </section>
   );
 }

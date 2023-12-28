@@ -1,5 +1,5 @@
 import { KabanDataColumnProps } from "../App";
-import Column from "../components/mainboad/Column";
+import Column from "../components/mainboard/Column";
 import RightBoard from "./RightBoard";
 
 interface MainProps {
