@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
+import ColumnStatus from "./ColumnStatus";
+import { KabanDataColumnProps } from "../../App";
+import ColumnStatusInfo from "./ColumnStatusInfo";
 
 interface EditTaskModalProps {
   setEditTaskModal: (value: boolean) => void;
@@ -22,6 +25,10 @@ interface EditTaskModalProps {
   editDescription: string;
   setEditDescription: (value: string) => void;
   handleEditDescription: () => void;
+  kanbanData: KabanDataColumnProps[];
+  isCurrentStatusOpen: boolean;
+  setIsCurrentStatusOpen: (value: boolean) => void;
+  setIsModalOpen: (value: boolean) => void;
 }
 
 export default function EditTaskModal(props: EditTaskModalProps) {
@@ -43,6 +50,10 @@ export default function EditTaskModal(props: EditTaskModalProps) {
     editDescription,
     handleEditDescription,
     setEditDescription,
+    kanbanData,
+    isCurrentStatusOpen,
+    setIsCurrentStatusOpen,
+    setIsModalOpen,
   } = props;
 
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -62,14 +73,15 @@ export default function EditTaskModal(props: EditTaskModalProps) {
   }
 
   return (
-    <div
+    <form
+      onSubmit={(e) => e.preventDefault()}
       onClick={(e) => e.stopPropagation()}
       className="absolute top-1/2 cursor-auto text-[#ffffff] left-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <div className="w-[480px] h-[680px] space-y-4 bg-[#2B2C37] rounded-lg p-7">
         <h1 className="text-[22px]">Edit Task</h1>
         <div className="space-y-1">
-          <h1  className="text-[12px]">Title:</h1>
+          <h1 className="text-[12px]">Title:</h1>
           <input
             onChange={(e) => setEditInputTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleEditTitle()}
@@ -90,14 +102,14 @@ export default function EditTaskModal(props: EditTaskModalProps) {
         </div>
 
         {/* change this after? */}
-        <div className="space-y-1 overflow-x-auto h-[340px]">
+        <div className="space-y-1 overflow-x-auto h-[200px]">
           <h1 className="text-[12px]">Subtasks</h1>
           <div className="space-y-2">
             {subtasks.map((task) => (
               <RenderSubTask value={task.title} />
             ))}
           </div>
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <div className="space-y-4">
             <div
               className={`flex items-center gap-x-4 ${
                 showInput ? "flex" : "hidden"
@@ -120,9 +132,27 @@ export default function EditTaskModal(props: EditTaskModalProps) {
             >
               + Add New Subtask
             </button>
-          </form>
+          </div>
         </div>
+        <ColumnStatusInfo
+          kanbanData={kanbanData}
+          status={status}
+          setIsCurrentStatusOpen={setIsCurrentStatusOpen}
+          handleEditStatus={handleEditStatus}
+          isCurrentStatusOpen={isCurrentStatusOpen}
+        />
+        <button
+          onClick={() => {
+            handleEditDescription();
+            handleEditTitle();
+            setEditTaskModal(false);
+            setIsModalOpen(false);
+          }}
+          className="w-full py-2 text-sm hover:brightness-150 duration-300 rounded-full bg-[#635FC7]"
+        >
+          Save Changes
+        </button>
       </div>
-    </div>
+    </form>
   );
 }

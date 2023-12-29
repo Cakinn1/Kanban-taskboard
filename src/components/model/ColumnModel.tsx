@@ -7,6 +7,8 @@ import ColumnInfo from "./ColumnInfo";
 import { FaChevronUp } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa6";
 import EditTaskModal from "./EditTaskModal";
+import ColumnStatus from "./ColumnStatus";
+import ColumnStatusInfo from "./ColumnStatusInfo";
 interface ColumnModelProps extends KanbanTaskProps {
   setIsModalOpen: (value: boolean) => void;
   subTaskLength: number;
@@ -29,10 +31,8 @@ export default function ColumnModel(props: ColumnModelProps) {
     setKanbanData,
     kanbanData,
   } = props;
-
   const [isOtherModalsOpen, setIsOtherModalsOpen] = useState<boolean>(false);
   const [deleteTaskModel, setDeleteTaskModel] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>("");
   const [editTaskModal, setEditTaskModal] = useState<boolean>(false);
   const [editInputTitle, setEditInputTitle] = useState<string>(title);
   const [editDescription, setEditDescription] = useState<string>(description);
@@ -206,7 +206,11 @@ export default function ColumnModel(props: ColumnModelProps) {
           title={title}
           key={title}
         />
-        <div className="space-y-2 h-[260px] overflow-y-auto">
+        <div
+          className={`${
+            subTaskLength >= 4 ? "h-[200px]" : "h-[160px]"
+          } space-y-2 overflow-y-auto`}
+        >
           <h1 className="text-white text-[13px]">
             Subtasks ({subTaskComepletedTrue} of {subTaskLength})
           </h1>
@@ -223,39 +227,13 @@ export default function ColumnModel(props: ColumnModelProps) {
             })}
           </div>
         </div>
-        <div className="space-y-2 text-sm relative text-white">
-          <h1>Current Status</h1>
-          <div
-            onClick={() => setIsCurrentStatusOpen(!isCurrentStatusOpen)}
-            className="rounded-md border-gray-500 border-2 px-6 flex justify-between items-center py-2"
-          >
-            <h1>{status}</h1>
-            {isCurrentStatusOpen ? (
-              <FaChevronUp className="text-[10px] text-[#635FC7]" />
-            ) : (
-              <FaChevronDown className="text-[10px] text-[#635FC7]" />
-            )}
-          </div>
-          <div
-            className={` ${
-              isCurrentStatusOpen
-                ? "opacity-100"
-                : "opacity-0 pointer-events-none"
-            } duration-300 absolute space-y-2 bg-[#20212C] rounded-md p-4  w-full min-h-[100px]`}
-          >
-            {kanbanData.map((names) => {
-              return (
-                <h1
-                  key={names.name}
-                  onClick={() => handleEditStatus(names.name)}
-                  className="text-gray-400 hover:text-white duration-300 "
-                >
-                  {names.name}
-                </h1>
-              );
-            })}
-          </div>
-        </div>
+        <ColumnStatusInfo
+          kanbanData={kanbanData}
+          status={status}
+          setIsCurrentStatusOpen={setIsCurrentStatusOpen}
+          handleEditStatus={handleEditStatus}
+          isCurrentStatusOpen={isCurrentStatusOpen}
+        />
       </div>
       {deleteTaskModel && (
         <DeleteTaskModel
@@ -267,6 +245,10 @@ export default function ColumnModel(props: ColumnModelProps) {
       )}
       {editTaskModal && (
         <EditTaskModal
+          setIsModalOpen={setIsModalOpen}
+          setIsCurrentStatusOpen={setIsCurrentStatusOpen}
+          isCurrentStatusOpen={isCurrentStatusOpen}
+          kanbanData={kanbanData}
           handleEditDescription={handleEditDescription}
           editDescription={editDescription}
           setEditDescription={setEditDescription}
