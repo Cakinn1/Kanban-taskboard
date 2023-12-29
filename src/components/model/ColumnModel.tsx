@@ -29,10 +29,13 @@ export default function ColumnModel(props: ColumnModelProps) {
     setKanbanData,
     kanbanData,
   } = props;
+
   const [isOtherModalsOpen, setIsOtherModalsOpen] = useState<boolean>(false);
   const [deleteTaskModel, setDeleteTaskModel] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const [editTaskModal, setEditTaskModal] = useState<boolean>(false);
+  const [editInputTitle, setEditInputTitle] = useState<string>(title);
+  const [editDescription, setEditDescription] = useState<string>(description);
   const [subTaskInputFieldValue, setSubTaskInputFieldValue] =
     useState<string>("");
   const [isCurrentStatusOpen, setIsCurrentStatusOpen] =
@@ -130,9 +133,8 @@ export default function ColumnModel(props: ColumnModelProps) {
   }
 
   function handleAddNewSubTask() {
-
-    if(subTaskInputFieldValue.length <= 3 || subTaskInputFieldValue === " ") {
-      return
+    if (subTaskInputFieldValue.length <= 3 || subTaskInputFieldValue === " ") {
+      return;
     }
     const newValues = {
       title: subTaskInputFieldValue,
@@ -157,6 +159,32 @@ export default function ColumnModel(props: ColumnModelProps) {
     setSubTaskInputFieldValue("");
   }
 
+  function handleEditTitle() {
+    const updateKanbanData = kanbanData.map((item) => {
+      return {
+        ...item,
+        tasks: item.tasks.map((task) => {
+          return task.id === id ? { ...task, title: editInputTitle } : task;
+        }),
+      };
+    });
+    setKanbanData(updateKanbanData);
+  }
+
+  function handleEditDescription() {
+    const updateKanbanData = kanbanData.map((item) => {
+      return {
+        ...item,
+        tasks: item.tasks.map((task) => {
+          return task.id === id
+            ? { ...task, description: editDescription }
+            : task;
+        }),
+      };
+    });
+    setKanbanData(updateKanbanData);
+  }
+
   return (
     <section
       onClick={() => setIsModalOpen(false)}
@@ -178,11 +206,11 @@ export default function ColumnModel(props: ColumnModelProps) {
           title={title}
           key={title}
         />
-        <div className="space-y-2">
+        <div className="space-y-2 h-[260px] overflow-y-auto">
           <h1 className="text-white text-[13px]">
             Subtasks ({subTaskComepletedTrue} of {subTaskLength})
           </h1>
-          <div className="space-y-4">
+          <div className="space-y-4 ">
             {subtasks.map((subtask, index) => {
               return (
                 <ColumnInfo
@@ -239,6 +267,12 @@ export default function ColumnModel(props: ColumnModelProps) {
       )}
       {editTaskModal && (
         <EditTaskModal
+          handleEditDescription={handleEditDescription}
+          editDescription={editDescription}
+          setEditDescription={setEditDescription}
+          handleEditTitle={handleEditTitle}
+          editInputTitle={editInputTitle}
+          setEditInputTitle={setEditInputTitle}
           subTaskInputFieldValue={subTaskInputFieldValue}
           setSubTaskInputFieldValue={setSubTaskInputFieldValue}
           handleAddNewSubTask={handleAddNewSubTask}

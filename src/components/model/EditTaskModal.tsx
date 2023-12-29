@@ -16,6 +16,12 @@ interface EditTaskModalProps {
   handleAddNewSubTask: () => void;
   setSubTaskInputFieldValue: (value: string) => void;
   subTaskInputFieldValue: string;
+  editInputTitle: string;
+  setEditInputTitle: (value: string) => void;
+  handleEditTitle: () => void;
+  editDescription: string;
+  setEditDescription: (value: string) => void;
+  handleEditDescription: () => void;
 }
 
 export default function EditTaskModal(props: EditTaskModalProps) {
@@ -31,6 +37,12 @@ export default function EditTaskModal(props: EditTaskModalProps) {
     handleAddNewSubTask,
     setSubTaskInputFieldValue,
     subTaskInputFieldValue,
+    editInputTitle,
+    setEditInputTitle,
+    handleEditTitle,
+    editDescription,
+    handleEditDescription,
+    setEditDescription,
   } = props;
 
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -38,7 +50,7 @@ export default function EditTaskModal(props: EditTaskModalProps) {
   function RenderSubTask({ value }: { value: string }) {
     return (
       <div className="flex items-center gap-x-4">
-        <h1 className="border-2 w-[100%] border-gray-500 rounded-md p-2 text-sm ">
+        <h1 className="border-2 w-[100%]  border-[#828fa366]  rounded-md p-2 text-sm ">
           {value}
         </h1>
         <FaXmark
@@ -52,27 +64,34 @@ export default function EditTaskModal(props: EditTaskModalProps) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute top-1/2 cursor-auto text-white left-1/2 -translate-x-1/2 -translate-y-1/2"
+      className="absolute top-1/2 cursor-auto text-[#ffffff] left-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <div className="w-[480px] h-[680px] space-y-4 bg-[#2B2C37] rounded-lg p-7">
-        <h1 className="text-2xl">Edit Task</h1>
+        <h1 className="text-[22px]">Edit Task</h1>
         <div className="space-y-1">
-          <h1>Title:</h1>
-          <h1 className="border-2 border-gray-500 rounded-md p-2 text-sm ">
-            {title}
-          </h1>
+          <h1  className="text-[12px]">Title:</h1>
+          <input
+            onChange={(e) => setEditInputTitle(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleEditTitle()}
+            className="border-2 bg-transparent focus:outline-none w-full  border-[#828fa366] rounded-md p-2 text-sm "
+            type="text"
+            value={editInputTitle}
+          />
         </div>
 
         <div className="space-y-1">
-          <h1>Description:</h1>
-          <h1 className="border-2 border-gray-500 min-h-[100px] rounded-md p-2 text-sm ">
-            {description}
-          </h1>
+          <h1 className="text-[12px]">Description:</h1>
+          <textarea
+            onChange={(e) => setEditDescription(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleEditDescription()}
+            className="border-2 resize-none focus:outline-none  bg-transparent min-h-[100px] w-full  border-[#828fa366] rounded-md p-2 text-sm "
+            value={editDescription}
+          />
         </div>
 
         {/* change this after? */}
         <div className="space-y-1 overflow-x-auto h-[340px]">
-          <h1>Subtasks:</h1>
+          <h1 className="text-[12px]">Subtasks</h1>
           <div className="space-y-2">
             {subtasks.map((task) => (
               <RenderSubTask value={task.title} />
@@ -85,7 +104,7 @@ export default function EditTaskModal(props: EditTaskModalProps) {
               }`}
             >
               <input
-                className="border-2 bg-transparent w-[100%] focus:outline-none mt-1 border-gray-500 rounded-md p-2 text-sm"
+                className="border-2 bg-transparent w-[100%] focus:outline-none mt-1 border-[#828fa366] rounded-md p-2 text-sm"
                 onChange={(e) => setSubTaskInputFieldValue(e.target.value)}
                 type="text"
                 value={subTaskInputFieldValue}
@@ -93,7 +112,7 @@ export default function EditTaskModal(props: EditTaskModalProps) {
               <FaXmark className="text-2xl cursor-pointer text-gray-500 duration-300 hover:brightness-150" />
             </div>
             <button
-              className="w-full py-2 text-[#635fc7] flex justify-center items-center bg-white rounded-full"
+              className="w-full py-2 text-[#635fc7] duration-300 hover:bg-opacity-60 flex justify-center items-center bg-white rounded-full"
               onClick={() => {
                 handleAddNewSubTask();
                 setShowInput(true);
