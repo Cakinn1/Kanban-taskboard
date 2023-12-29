@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 
 interface EditTaskModalProps {
@@ -13,6 +13,9 @@ interface EditTaskModalProps {
   status: string;
   handleEditStatus: (value: string) => void;
   handleDeleteSubTask: (value: string) => void;
+  handleAddNewSubTask: () => void;
+  setSubTaskInputFieldValue: (value: string) => void;
+  subTaskInputFieldValue: string;
 }
 
 export default function EditTaskModal(props: EditTaskModalProps) {
@@ -25,7 +28,12 @@ export default function EditTaskModal(props: EditTaskModalProps) {
     subtasks,
     title,
     handleDeleteSubTask,
+    handleAddNewSubTask,
+    setSubTaskInputFieldValue,
+    subTaskInputFieldValue,
   } = props;
+
+  const [showInput, setShowInput] = useState<boolean>(false);
 
   function RenderSubTask({ value }: { value: string }) {
     return (
@@ -62,13 +70,38 @@ export default function EditTaskModal(props: EditTaskModalProps) {
           </h1>
         </div>
 
-        <div className="space-y-1">
+        {/* change this after? */}
+        <div className="space-y-1 overflow-x-auto h-[340px]">
           <h1>Subtasks:</h1>
           <div className="space-y-2">
             {subtasks.map((task) => (
               <RenderSubTask value={task.title} />
             ))}
           </div>
+          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <div
+              className={`flex items-center gap-x-4 ${
+                showInput ? "flex" : "hidden"
+              }`}
+            >
+              <input
+                className="border-2 bg-transparent w-[100%] focus:outline-none mt-1 border-gray-500 rounded-md p-2 text-sm"
+                onChange={(e) => setSubTaskInputFieldValue(e.target.value)}
+                type="text"
+                value={subTaskInputFieldValue}
+              />
+              <FaXmark className="text-2xl cursor-pointer text-gray-500 duration-300 hover:brightness-150" />
+            </div>
+            <button
+              className="w-full py-2 text-[#635fc7] flex justify-center items-center bg-white rounded-full"
+              onClick={() => {
+                handleAddNewSubTask();
+                setShowInput(true);
+              }}
+            >
+              + Add New Subtask
+            </button>
+          </form>
         </div>
       </div>
     </div>

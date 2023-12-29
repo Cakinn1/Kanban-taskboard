@@ -33,6 +33,8 @@ export default function ColumnModel(props: ColumnModelProps) {
   const [deleteTaskModel, setDeleteTaskModel] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const [editTaskModal, setEditTaskModal] = useState<boolean>(false);
+  const [subTaskInputFieldValue, setSubTaskInputFieldValue] =
+    useState<string>("");
   const [isCurrentStatusOpen, setIsCurrentStatusOpen] =
     useState<boolean>(false);
 
@@ -124,8 +126,35 @@ export default function ColumnModel(props: ColumnModelProps) {
         }),
       };
     });
-    console.log(updateKanbanData);
     setKanbanData(updateKanbanData);
+  }
+
+  function handleAddNewSubTask() {
+
+    if(subTaskInputFieldValue.length <= 3 || subTaskInputFieldValue === " ") {
+      return
+    }
+    const newValues = {
+      title: subTaskInputFieldValue,
+      isCompleted: false,
+    };
+    const updateKanbanData = kanbanData.map((item) => {
+      return {
+        ...item,
+        tasks: item.tasks.map((task) => {
+          if (task.id === id) {
+            return {
+              ...task,
+              subtasks: task.subtasks.concat(newValues),
+            };
+          } else {
+            return task;
+          }
+        }),
+      };
+    });
+    setKanbanData(updateKanbanData);
+    setSubTaskInputFieldValue("");
   }
 
   return (
@@ -210,7 +239,10 @@ export default function ColumnModel(props: ColumnModelProps) {
       )}
       {editTaskModal && (
         <EditTaskModal
-        handleDeleteSubTask={handleDeleteSubTask}
+          subTaskInputFieldValue={subTaskInputFieldValue}
+          setSubTaskInputFieldValue={setSubTaskInputFieldValue}
+          handleAddNewSubTask={handleAddNewSubTask}
+          handleDeleteSubTask={handleDeleteSubTask}
           editTaskModal={editTaskModal}
           title={title}
           description={description}
