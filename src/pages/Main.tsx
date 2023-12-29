@@ -11,11 +11,12 @@ interface MainProps {
   chooseBoard: BoardProps[];
   setChooseBoard: (value: BoardProps[]) => void;
   setChangeBoard: (value: number) => void;
+  lengthOfBoard: number;
 }
 
 export default function Main(props: MainProps) {
   const {
-    setAddTaskModal, 
+    setAddTaskModal,
     kanbanData,
     setKanbanData,
     editTaskModal,
@@ -23,12 +24,14 @@ export default function Main(props: MainProps) {
     chooseBoard,
     setChooseBoard,
     setChangeBoard,
+    lengthOfBoard,
   } = props;
 
   return (
     <section className="flex" style={{ height: "calc(100vh - 100px)" }}>
       <RightBoard
-      setAddTaskModal={setAddTaskModal} 
+        lengthOfBoard={lengthOfBoard}
+        setAddTaskModal={setAddTaskModal}
         setChangeBoard={setChangeBoard}
         chooseBoard={chooseBoard}
         setChooseBoard={setChooseBoard}

@@ -49,6 +49,7 @@ export default function App() {
   );
 
   const nameOfBoard = data.boards[changeBoard].name;
+  const lengthOfBoard = data.boards.length
 
   function handleCreateNewBoardAndCloseModal() {
     setIdIncreamented(idIncreamented + 1);
@@ -59,8 +60,8 @@ export default function App() {
       columns: [],
     };
 
+
     data.boards.push(newboard);
-    setChooseBoard([...chooseBoard, newboard]);
     setAddTaskModal(false);
   }
 
@@ -76,13 +77,13 @@ export default function App() {
       setColumnIdIncreamented(columnIdIncreamented + 1);
     }
   }
-
   useEffect(() => {
     if (idIncreamented > 2) {
       addColumnsToNewBoard();
     }
     console.log(data.boards);
   }, [idIncreamented]);
+
   useEffect(() => {
     setKanbanData(data.boards[changeBoard].columns);
   }, [changeBoard]);
@@ -91,6 +92,7 @@ export default function App() {
     <div className="h-screen">
       <Nav nameOfBoard={nameOfBoard} setEditTaskModal={setEditTaskModal} />
       <Main
+      lengthOfBoard={lengthOfBoard}
         setAddTaskModal={setAddTaskModal}
         setChangeBoard={setChangeBoard}
         chooseBoard={chooseBoard}

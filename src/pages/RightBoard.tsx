@@ -10,11 +10,12 @@ interface RightBoardProps {
   setChooseBoard: (value: BoardProps[]) => void;
   setChangeBoard: (value: number) => void;
   setAddTaskModal: (value: boolean) => void;
+  lengthOfBoard: number
 
 }
 
 export default function RightBoard(props: RightBoardProps) {
-  const { chooseBoard, setChooseBoard, setChangeBoard, setAddTaskModal } =
+  const { chooseBoard, setChooseBoard, setChangeBoard, setAddTaskModal, lengthOfBoard } =
     props;
 
     useEffect(() => {
@@ -28,7 +29,7 @@ export default function RightBoard(props: RightBoardProps) {
       className="w-[300px] flex flex-col fixed  z-50 border-r border-r-[#3E3F4E]"
     >
       <h1 className="px-10 py-4 cursor-default uppercase text-[#828fa3] tracking-[2px] text-sm">
-        all boards (2)
+        all boards ({lengthOfBoard})
       </h1>
       <div className="space-y-2 text-white tracking-wide">
         {chooseBoard.map((boardValue) => {

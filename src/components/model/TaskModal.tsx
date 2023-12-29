@@ -1,3 +1,4 @@
+
 interface TaskModalProps {
   setBoardNameValue: (value: string) => void;
   boardNameValue: string;
@@ -16,6 +17,8 @@ export default function TaskModal(props: TaskModalProps) {
     handleCreateNewBoardAndCloseModal,
     setColumnNameValue,
   } = props;
+
+
   return (
     <div className="w-full top-0 text-[#ffffff] left-0 h-full absolute  bg-black z-50 bg-opacity-40">
       <div className="absolute space-y-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg h-[330px] bg-[#2B2C37] w-[480px]">
