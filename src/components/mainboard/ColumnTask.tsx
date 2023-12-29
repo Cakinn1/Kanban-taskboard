@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { KabanDataColumnProps, KanbanTaskProps } from "../../App";
 import ColumnModel from "../model/ColumnModel";
 
 interface ColumnTaskProps extends KanbanTaskProps {
   setKanbanData: (value: KabanDataColumnProps[]) => void;
   kanbanData: KabanDataColumnProps[];
+  setEditTaskModal: (value: boolean) => void;
+  editTaskModal: boolean;
+
 }
 
 export default function ColumnTask(props: ColumnTaskProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const {
     description,
     id,
@@ -18,6 +22,9 @@ export default function ColumnTask(props: ColumnTaskProps) {
     title,
     setKanbanData,
     kanbanData,
+    editTaskModal,
+    setEditTaskModal,
+
   } = props;
 
   const subTaskComepletedTrue = subtasks.filter((item) => {
@@ -32,6 +39,9 @@ export default function ColumnTask(props: ColumnTaskProps) {
     setIsModalOpen(!isModalOpen);
   }
 
+
+ 
+
   return (
     <section className="w-[320px]">
       <div
@@ -45,6 +55,9 @@ export default function ColumnTask(props: ColumnTaskProps) {
       </div>
       {isModalOpen && (
         <ColumnModel
+          isModalOpen={isModalOpen}
+          setEditTaskModal={setEditTaskModal}
+          editTaskModal={editTaskModal}
           kanbanData={kanbanData}
           setKanbanData={setKanbanData}
           subTaskComepletedTrue={subTaskComepletedTrue.length}

@@ -15,6 +15,9 @@ interface ColumnModelProps extends KanbanTaskProps {
   subTaskComepletedTrue: number;
   setKanbanData: (value: KabanDataColumnProps[]) => void;
   kanbanData: KabanDataColumnProps[];
+  setEditTaskModal: (value: boolean) => void;
+  editTaskModal: boolean;
+  isModalOpen: boolean;
 }
 
 export default function ColumnModel(props: ColumnModelProps) {
@@ -30,10 +33,12 @@ export default function ColumnModel(props: ColumnModelProps) {
     subTaskLength,
     setKanbanData,
     kanbanData,
+    editTaskModal,
+    setEditTaskModal,
+    isModalOpen,
   } = props;
   const [isOtherModalsOpen, setIsOtherModalsOpen] = useState<boolean>(false);
   const [deleteTaskModel, setDeleteTaskModel] = useState<boolean>(false);
-  const [editTaskModal, setEditTaskModal] = useState<boolean>(false);
   const [editInputTitle, setEditInputTitle] = useState<string>(title);
   const [editDescription, setEditDescription] = useState<string>(description);
   const [subTaskInputFieldValue, setSubTaskInputFieldValue] =
@@ -187,7 +192,10 @@ export default function ColumnModel(props: ColumnModelProps) {
 
   return (
     <section
-      onClick={() => setIsModalOpen(false)}
+      onClick={() => {
+        setIsModalOpen(false);
+        setEditTaskModal(false);
+      }}
       className="absolute z-50 cursor-pointer  bg-black bg-opacity-40 w-full h-full top-0 left-0"
     >
       <div

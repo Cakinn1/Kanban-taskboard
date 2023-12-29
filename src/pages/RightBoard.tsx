@@ -1,9 +1,27 @@
 import CreateBoardRenderButton from "../components/rightboard/CreateBoardRenderButton";
-import { createBoardValue } from "../data/constant";
 import CreateBoards from "../components/rightboard/CreateBoards";
 import BottomBar from "../components/rightboard/BottomBar";
+import { BoardProps } from "../App";
+import { useEffect, useState } from "react";
+import TaskModal from "../components/model/TaskModal";
 
-export default function RightBoard() {
+interface RightBoardProps {
+  chooseBoard: BoardProps[];
+  setChooseBoard: (value: BoardProps[]) => void;
+  setChangeBoard: (value: number) => void;
+  setAddTaskModal: (value: boolean) => void;
+
+}
+
+export default function RightBoard(props: RightBoardProps) {
+  const { chooseBoard, setChooseBoard, setChangeBoard, setAddTaskModal } =
+    props;
+
+    useEffect(() => {
+      console.log(chooseBoard);
+    }, [chooseBoard]);
+    
+
   return (
     <div
       style={{ height: "calc(100vh - 100px)" }}
@@ -13,14 +31,19 @@ export default function RightBoard() {
         all boards (2)
       </h1>
       <div className="space-y-2 text-white tracking-wide">
-        {createBoardValue.map((boardValue, index) => {
+        {chooseBoard.map((boardValue) => {
           return (
-            <CreateBoardRenderButton key={index} title={boardValue.title} />
+            <CreateBoardRenderButton
+              setChangeBoard={setChangeBoard}
+              key={boardValue.id}
+              id={boardValue.id}
+              name={boardValue.name}
+            />
           );
         })}
-        <CreateBoards />
+        <CreateBoards  setAddTaskModal={setAddTaskModal} />
       </div>
-     <BottomBar />
+      <BottomBar />
     </div>
   );
 }

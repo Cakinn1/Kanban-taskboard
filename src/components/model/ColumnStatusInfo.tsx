@@ -36,7 +36,7 @@ export default function ColumnStatusInfo(props: ColumnStatusInfoProps) {
       <div
         className={` ${
           isCurrentStatusOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        } duration-300 absolute space-y-2 bg-[#20212C] rounded-md p-4  w-full min-h-[100px]`}
+        } duration-300 absolute space-y-2 bg-[#20212C] rounded-md p-4  w-full `}
       >
         {kanbanData.map((names) => {
           return (
