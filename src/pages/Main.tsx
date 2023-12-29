@@ -17,7 +17,7 @@ export default function Main(props: MainProps) {
           {kanbanData.map((data) => {
             return (
               <Column
-              kanbanData={kanbanData}
+                kanbanData={kanbanData}
                 setKanbanData={setKanbanData}
                 id={data.id}
                 name={data.name}

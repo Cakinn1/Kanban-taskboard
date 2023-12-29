@@ -7,16 +7,20 @@ interface HeaderProps {
   setIsOtherModalsOpen: (value: boolean) => void;
   setDeleteTaskModel: (value: boolean) => void;
   deleteTaskModel: boolean;
+  setEditTaskModal: (value: boolean) => void;
+  editTaskModal: boolean;
 }
 
 export default function ColumnHeader(props: HeaderProps) {
   const [isModelOpen, setIsModelOpen] = useState<boolean>(false);
   const {
+    editTaskModal,
     description,
     title,
     setIsOtherModalsOpen,
     deleteTaskModel,
     setDeleteTaskModel,
+    setEditTaskModal,
   } = props;
 
   return (
@@ -36,10 +40,20 @@ export default function ColumnHeader(props: HeaderProps) {
       {isModelOpen && (
         <div className="absolute space-y-2 cursor-auto bg-[#20212C] tracking-wide -bottom-[70px] w-[190px] h-[94px] rounded-lg shadow-lg p-4 px-6 -right-[100px]">
           <div className="flex text-[#828fa3] justify-between items-center">
-            <h1 className="hover:opacity-60 cursor-pointer duration-300">
+            <h1
+              onClick={() => {
+                setIsModelOpen(false);
+                setIsOtherModalsOpen(true);
+                setEditTaskModal(!editTaskModal);
+              }}
+              className="hover:opacity-60 cursor-pointer duration-300"
+            >
               Edit task
             </h1>
-            <FaXmark onClick={() => setIsModelOpen(false)} className="duration-300  hover:opacity-60 cursor-pointer" />
+            <FaXmark
+              onClick={() => setIsModelOpen(false)}
+              className="duration-300  hover:opacity-60 cursor-pointer"
+            />
           </div>
           <p
             className="text-red-500 w-fit hover:opacity-60 cursor-pointer duration-300"

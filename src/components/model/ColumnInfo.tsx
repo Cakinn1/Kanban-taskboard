@@ -7,7 +7,7 @@ interface SubTaskProps {
 }
 
 export default function ColumnInfo(props: SubTaskProps) {
-  const { isCompleted, title, handleSubtaskBooleanValue } = props;
+  const { isCompleted, title, handleSubtaskBooleanValue,  } = props;
   const [isChecked, setIsChecked] = useState<boolean>(isCompleted);
 
   function handleCheckBox() {

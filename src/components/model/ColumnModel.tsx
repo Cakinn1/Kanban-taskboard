@@ -6,6 +6,7 @@ import DeleteTaskModel from "./DeleteTaskModel";
 import ColumnInfo from "./ColumnInfo";
 import { FaChevronUp } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa6";
+import EditTaskModal from "./EditTaskModal";
 interface ColumnModelProps extends KanbanTaskProps {
   setIsModalOpen: (value: boolean) => void;
   subTaskLength: number;
@@ -31,6 +32,7 @@ export default function ColumnModel(props: ColumnModelProps) {
   const [isOtherModalsOpen, setIsOtherModalsOpen] = useState<boolean>(false);
   const [deleteTaskModel, setDeleteTaskModel] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
+  const [editTaskModal, setEditTaskModal] = useState<boolean>(false);
   const [isCurrentStatusOpen, setIsCurrentStatusOpen] =
     useState<boolean>(false);
 
@@ -83,11 +85,11 @@ export default function ColumnModel(props: ColumnModelProps) {
     if (findCurrentItemAsObj) {
       const arrayContainingItem = kanbanData.find((item) => {
         return item.tasks.includes(findCurrentItemAsObj);
-      })
+      });
+
       arrayContainingItem!.tasks = arrayContainingItem!.tasks.filter((item) => {
         return item.id !== findCurrentItemAsObj.id;
       });
- 
 
       const targetColumn = kanbanData.find((item) => {
         return item.name === currentStatus;
@@ -108,6 +110,24 @@ export default function ColumnModel(props: ColumnModelProps) {
     }
   }
 
+  function handleDeleteSubTask(title: string) {
+    const updateKanbanData = kanbanData.map((item) => {
+      return {
+        ...item,
+        tasks: item.tasks.map((task) => {
+          return {
+            ...task,
+            subtasks: task.subtasks.filter((subtask) => {
+              return subtask.title !== title;
+            }),
+          };
+        }),
+      };
+    });
+    console.log(updateKanbanData);
+    setKanbanData(updateKanbanData);
+  }
+
   return (
     <section
       onClick={() => setIsModalOpen(false)}
@@ -120,6 +140,8 @@ export default function ColumnModel(props: ColumnModelProps) {
         } absolute left-1/2  space-y-4  p-8 w-[480px] rounded-2xl min-h-[370px] -translate-x-1/2 -translate-y-1/2 top-1/2 bg-[#2B2C37]`}
       >
         <ColumnHeader
+          editTaskModal={editTaskModal}
+          setEditTaskModal={setEditTaskModal}
           setDeleteTaskModel={setDeleteTaskModel}
           deleteTaskModel={deleteTaskModel}
           setIsOtherModalsOpen={setIsOtherModalsOpen}
@@ -184,6 +206,18 @@ export default function ColumnModel(props: ColumnModelProps) {
           setDeleteTaskModel={setDeleteTaskModel}
           deleteTaskModel={deleteTaskModel}
           handleDeleteTask={handleDeleteTask}
+        />
+      )}
+      {editTaskModal && (
+        <EditTaskModal
+        handleDeleteSubTask={handleDeleteSubTask}
+          editTaskModal={editTaskModal}
+          title={title}
+          description={description}
+          subtasks={subtasks}
+          status={status}
+          handleEditStatus={handleEditStatus}
+          setEditTaskModal={setEditTaskModal}
         />
       )}
     </section>
