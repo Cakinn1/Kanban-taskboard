@@ -1,5 +1,5 @@
 import React from "react";
-import { KabanDataColumnProps } from "../../App";
+import { KabanDataColumnProps, KanbanTaskProps } from "../../App";
 import Title from "./Title";
 import ColumnTask from "./ColumnTask";
 
@@ -8,7 +8,7 @@ interface ColumnProps extends KabanDataColumnProps {
   kanbanData: KabanDataColumnProps[];
   setEditTaskModal: (value: boolean) => void;
   editTaskModal: boolean;
-
+  handleOnDrag: (value: React.DragEvent, taskData: KanbanTaskProps) => void;
 }
 
 export default function Column(props: ColumnProps) {
@@ -20,16 +20,24 @@ export default function Column(props: ColumnProps) {
     kanbanData,
     editTaskModal,
     setEditTaskModal,
-
+    handleOnDrag,
   } = props;
 
   return (
     <div className="space-y-4">
       <Title name={name} tasks={tasks} id={id} />
-      <div className={`space-y-4 min-w-[320px]  ${tasks.length < 1 ? "border-2 border-[#828fa366] border-dashed h-[80vh] rounded-md" : ""} `}>
+
+      <div
+        className={`space-y-4 min-w-[320px]  ${
+          tasks.length < 1
+            ? "border-2 border-[#828fa366] border-dashed h-[80vh] rounded-md"
+            : ""
+        } `}
+      >
         {tasks.map((task) => {
           return (
             <ColumnTask
+              handleOnDrag={handleOnDrag}
               editTaskModal={editTaskModal}
               setEditTaskModal={setEditTaskModal}
               kanbanData={kanbanData}

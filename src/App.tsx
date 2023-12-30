@@ -49,7 +49,7 @@ export default function App() {
   );
 
   const nameOfBoard = data.boards[changeBoard].name;
-  const lengthOfBoard = data.boards.length
+  const lengthOfBoard = data.boards.length;
 
   function handleCreateNewBoardAndCloseModal() {
     setIdIncreamented(idIncreamented + 1);
@@ -59,7 +59,6 @@ export default function App() {
       name: boardNameValue,
       columns: [],
     };
-
 
     data.boards.push(newboard);
     setAddTaskModal(false);
@@ -92,7 +91,7 @@ export default function App() {
     <div className="h-screen">
       <Nav nameOfBoard={nameOfBoard} setEditTaskModal={setEditTaskModal} />
       <Main
-      lengthOfBoard={lengthOfBoard}
+        lengthOfBoard={lengthOfBoard}
         setAddTaskModal={setAddTaskModal}
         setChangeBoard={setChangeBoard}
         chooseBoard={chooseBoard}

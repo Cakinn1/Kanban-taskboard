@@ -7,7 +7,7 @@ interface ColumnTaskProps extends KanbanTaskProps {
   kanbanData: KabanDataColumnProps[];
   setEditTaskModal: (value: boolean) => void;
   editTaskModal: boolean;
-
+  handleOnDrag: (value: React.DragEvent, taskData: KanbanTaskProps) => void;
 }
 
 export default function ColumnTask(props: ColumnTaskProps) {
@@ -24,7 +24,7 @@ export default function ColumnTask(props: ColumnTaskProps) {
     kanbanData,
     editTaskModal,
     setEditTaskModal,
-
+    handleOnDrag,
   } = props;
 
   const subTaskComepletedTrue = subtasks.filter((item) => {
@@ -40,11 +40,21 @@ export default function ColumnTask(props: ColumnTaskProps) {
   }
 
 
- 
-
   return (
     <section className="w-[320px]">
+      {/* projects to get dragged */}
       <div
+        draggable
+        onDragStart={(e) =>
+          handleOnDrag(e, {
+            title: props.title,
+            description: props.description,
+            id: props.id,
+            status: props.status,
+            statusId: props.statusId,
+            subtasks: props.subtasks,
+          })
+        }
         onClick={() => handleModalOpen()}
         className="bg-[#2B2C37] space-y-1 cursor-pointer hover:opacity-50 duration-300  rounded-lg px-4 py-6"
       >
@@ -53,6 +63,7 @@ export default function ColumnTask(props: ColumnTaskProps) {
           {subTaskComepletedTrue.length} of {subTaskLength.length} subtasks
         </p>
       </div>
+
       {isModalOpen && (
         <ColumnModel
           isModalOpen={isModalOpen}
